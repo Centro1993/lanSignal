@@ -7,7 +7,10 @@ int pin2 = 10;
 int pin4 = 11;
  
 int pinButton = 5;
+int lastState = 0;
 
+int steps = 0;
+ 
 Stepper stepper(2048, pin1, pin2, pin3, pin4);
 
 boolean pressed = false;
@@ -28,17 +31,20 @@ void setup() {
 
 void loop()
 {
-  if(digitalRead(pinButton) == LOW && pressed == false) {
-    Serial.println(digitalRead(pinButton));
-    pressed = true;
-  } 
-  else if (digitalRead(pinButton) != LOW && digitalRead(pinButton) != HIGH) {
-    pressed = false;
-  }
+  /*int buttonState = digitalRead(pinButton);
+  if(buttonState == 1 && lastState != buttonState) {
+    Serial.println();
+  } else {
+    Serial.println(buttonState);
+   lastState = buttonState; 
+  }*/
+  
   if (Serial.available())
   {
-    int steps = Serial.parseInt();
-    stepper.step(steps);
-    Serial.println(steps);
+    while(Serial.available() > 0) {
+      steps += Serial.read();
+    }
+    stepper.step((int)steps);
+    steps = 0;
   }
 }

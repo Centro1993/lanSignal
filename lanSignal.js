@@ -6,13 +6,14 @@ var chalk = require('chalk');
 
 const port = 3001;
 const host = '0.0.0.0';
-const target = '127.0.0.1'; //zielcomputer
+const target = '192.168.0.1'; //zielcomputer
 
 SerialPort = serialport.SerialPort;
 arduinoPort = process.argv[2];
 var portOpen = false;
 
 var answered = true;
+var lastButtonTime = 0;
 var steps = 4000;
 
 if (process.argv[2] == "-l") {
@@ -69,7 +70,8 @@ var sendRequest = function() {
   });
 
   req.on('error', (e) => {
-    console.log(`problem with request: ${e.message}`);
+    console.log(chalk.red(`problem with request: ${e.message}`));
+    answered = true;
   });
 
   // write data to request body
@@ -91,10 +93,10 @@ if (portOpen) {
 
   function sendSerialData(data) {
     console.log(chalk.blue("Knopf gedrückt"));
-    if(answered) {
+    if (answered) {
       !answered;
-    sendRequest();
-  }
+      sendRequest();
+    }
 
   }
 
@@ -125,8 +127,8 @@ var handleRequest = function(req, res) {
     var signal = new Buffer(steps);
 
     myPort.write(signal, function(err, result) {
-      if (err != null) console.log(err);
-      if (result != null) console.log(result);
+      if (err != null) console.log(chalk.red(err));
+      if (result != null) console.log(chalk.green(result));
     });
     res.writeHead(200, {
       'Content-type': 'text/HTML'
