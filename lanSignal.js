@@ -1,4 +1,4 @@
-var serialport = require('serialport');
+﻿var serialport = require('serialport');
 var http = require('http');
 var dispatcher = require('httpdispatcher');
 var querystring = require('querystring');
@@ -6,7 +6,7 @@ var chalk = require('chalk');
 
 const port = 3001;
 const host = '0.0.0.0';
-const target = '192.168.0.1'; //zielcomputer
+const target = '192.168.0.23'; //zielcomputer
 
 SerialPort = serialport.SerialPort;
 arduinoPort = process.argv[2];
